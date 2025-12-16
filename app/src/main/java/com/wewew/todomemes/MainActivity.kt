@@ -10,6 +10,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.wewew.todomemes.ui.theme.TodoMemesTheme
 
@@ -18,10 +19,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val fileStorage = FileStorage(context = LocalContext.current)
+            fileStorage.add(
+                TodoItem(text = "some todo meme text")
+            )
             TodoMemesTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
-                        name = "Android",
+                        name = fileStorage.getItems().first().text,
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
