@@ -1,6 +1,6 @@
 package com.wewew.todomemes.data.remote
 
-import com.wewew.todomemes.TodoItem
+import com.wewew.todomemes.data.local.model.TodoItem
 import com.wewew.todomemes.data.remote.api.TodosApi
 import com.wewew.todomemes.data.remote.model.ElementRequest
 import com.wewew.todomemes.data.remote.model.PatchListRequest

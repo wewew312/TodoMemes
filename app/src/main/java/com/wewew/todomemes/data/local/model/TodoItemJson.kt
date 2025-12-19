@@ -1,8 +1,9 @@
-package com.wewew.todomemes
+package com.wewew.todomemes.data.local.model
 
 import android.graphics.Color
 import org.json.JSONObject
 import java.time.Instant
+import java.util.UUID
 
 private const val KEY_UID = "uid"
 private const val KEY_TEXT = "text"
@@ -15,7 +16,7 @@ fun TodoItem.Companion.parse(json: JSONObject): TodoItem? {
     val text = json.optString(KEY_TEXT, "").trim()
     if (text.isBlank()) return null
 
-    val uid = json.optString(KEY_UID, "").ifBlank { java.util.UUID.randomUUID().toString() }
+    val uid = json.optString(KEY_UID, "").ifBlank { UUID.randomUUID().toString() }
     val importance = Importance.fromRuName(json.optString(KEY_IMPORTANCE, null))
 
     val color = if (json.has(KEY_COLOR)) json.optInt(KEY_COLOR, Color.WHITE) else Color.WHITE

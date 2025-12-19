@@ -1,8 +1,6 @@
 package com.wewew.todomemes.data.remote
 
-import com.wewew.todomemes.TodoItem
-import kotlinx.coroutines.delay
-import org.slf4j.LoggerFactory
+import com.wewew.todomemes.data.local.model.TodoItem
 
 interface TodoRemoteDataSource {
     suspend fun fetchAll(): Result<List<TodoItem>>

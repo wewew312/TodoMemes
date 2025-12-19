@@ -4,6 +4,8 @@ import android.content.Context
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.wewew.todomemes.data.local.TodoLocalDataSource
 import com.wewew.todomemes.data.local.TodoLocalDataSourceImpl
+import com.wewew.todomemes.data.local.TodoLocalRoomDataSource
+import com.wewew.todomemes.data.local.db.TodoDatabase
 import com.wewew.todomemes.data.remote.TodoRemoteDataSource
 import com.wewew.todomemes.data.remote.TodoRemoteDataSourceImpl
 import com.wewew.todomemes.data.remote.api.AuthInterceptor
@@ -20,6 +22,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import javax.inject.Singleton
+import kotlin.jvm.java
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -66,12 +69,22 @@ object AppModule {
     fun provideTodosApi(retrofit: Retrofit): TodosApi =
         retrofit.create(TodosApi::class.java)
 
+//    @Provides
+//    @Singleton
+//    fun provideTodoLocalDataSource(
+//        @ApplicationContext context: Context
+//    ): TodoLocalDataSource {
+//        return TodoLocalDataSourceImpl(context)
+//    }
+
     @Provides
     @Singleton
-    fun provideTodoLocalDataSource(
+    fun provideLocalRoomDataSource(
         @ApplicationContext context: Context
     ): TodoLocalDataSource {
-        return TodoLocalDataSourceImpl(context)
+        return TodoLocalRoomDataSource(
+            todoDao = TodoDatabase.getInstance(context).noteDao()
+        )
     }
 
     @Provides

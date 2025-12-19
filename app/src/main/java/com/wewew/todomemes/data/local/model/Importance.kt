@@ -1,4 +1,4 @@
-package com.wewew.todomemes
+package com.wewew.todomemes.data.local.model
 
 enum class Importance(val ruName: String) {
     LOW("😴Неважно"),

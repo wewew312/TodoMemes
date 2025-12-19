@@ -1,9 +1,9 @@
 package com.wewew.todomemes.data.local
 
 import android.content.Context
-import com.wewew.todomemes.TodoItem
-import com.wewew.todomemes.json
-import com.wewew.todomemes.parse
+import com.wewew.todomemes.data.local.model.TodoItem
+import com.wewew.todomemes.data.local.model.json
+import com.wewew.todomemes.data.local.model.parse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

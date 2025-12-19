@@ -3,8 +3,8 @@ package com.wewew.todomemes.ui.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.wewew.todomemes.Importance
-import com.wewew.todomemes.TodoItem
+import com.wewew.todomemes.data.local.model.Importance
+import com.wewew.todomemes.data.local.model.TodoItem
 import com.wewew.todomemes.data.repository.TodoRepository
 import com.wewew.todomemes.ui.screens.toArgb
 import dagger.hilt.android.lifecycle.HiltViewModel

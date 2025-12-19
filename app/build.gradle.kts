@@ -92,6 +92,11 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.retrofit)
 
+    // Room local database
+    implementation(libs.androidx.room.runtime)
+    ksp("androidx.room:room-compiler:${rootProject.extra["room_version"]}")
+    implementation(libs.androidx.room.ktx)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

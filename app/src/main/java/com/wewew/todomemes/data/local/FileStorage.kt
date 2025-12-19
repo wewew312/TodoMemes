@@ -1,6 +1,9 @@
-package com.wewew.todomemes
+package com.wewew.todomemes.data.local
 
 import android.content.Context
+import com.wewew.todomemes.data.local.model.TodoItem
+import com.wewew.todomemes.data.local.model.json
+import com.wewew.todomemes.data.local.model.parse
 import org.json.JSONArray
 import org.json.JSONObject
 import org.slf4j.LoggerFactory
@@ -83,7 +86,7 @@ class FileStorage(
 
             for (i in 0 until arr.length()) {
                 val obj = arr.optJSONObject(i) ?: continue
-                val item = TodoItem.parse(obj) ?: continue
+                val item = TodoItem.Companion.parse(obj) ?: continue
                 items.add(item)
             }
             logger.info("Successfully loaded ${items.size} items from ${file.name}")
