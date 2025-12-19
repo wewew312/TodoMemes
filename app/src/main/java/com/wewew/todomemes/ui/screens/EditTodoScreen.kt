@@ -1,6 +1,5 @@
 package com.wewew.todomemes.ui.screens
 
-import android.graphics.Color as AndroidColor
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -49,54 +48,38 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.unit.dp
-import com.wewew.todomemes.Importance
-import com.wewew.todomemes.TodoItem
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wewew.todomemes.ui.components.ColorPicker
 import com.wewew.todomemes.ui.components.ColorSelector
 import com.wewew.todomemes.ui.components.ImportanceSelector
-import com.wewew.todomemes.ui.components.presetColors
+import com.wewew.todomemes.ui.viewmodel.EditTodoViewModel
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.util.Date
 import java.util.Locale
+import android.graphics.Color as AndroidColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditTodoScreen(
-    todoItem: TodoItem?,
-    onSave: (TodoItem) -> Unit,
     onBack: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: EditTodoViewModel = hiltViewModel()
 ) {
-    var text by remember { mutableStateOf(todoItem?.text ?: "") }
-    var importance by remember { mutableStateOf(todoItem?.importance ?: Importance.NORMAL) }
-    var isDone by remember { mutableStateOf(todoItem?.isDone ?: false) }
-    var deadline by remember { mutableStateOf(todoItem?.deadline) }
-    var selectedColor by remember {
-        mutableStateOf(Color(todoItem?.color ?: AndroidColor.WHITE))
-    }
+    val ui by viewModel.uiState.collectAsStateWithLifecycle()
 
-    var customColor by remember {
-        mutableStateOf(
-            if (todoItem != null && !presetColors.contains(Color(todoItem.color))) {
-                Color(todoItem.color)
-            } else null
-        )
-    }
+    val selectedColor = Color(ui.selectedColorArgb)
+    val customColor = ui.customColorArgb?.let { Color(it) }
 
-    var showDatePicker by remember { mutableStateOf(false) }
-    var showColorPicker by remember { mutableStateOf(false) }
-
-    val contentAlpha = if (isDone) 0.5f else 1f
+    val contentAlpha = if (ui.isDone) 0.5f else 1f
 
     Scaffold(
         modifier = modifier,
@@ -104,17 +87,10 @@ fun EditTodoScreen(
             EditTodoTopBar(
                 onBack = onBack,
                 onSave = {
-                    val item = TodoItem(
-                        uid = todoItem?.uid ?: java.util.UUID.randomUUID().toString(),
-                        text = text,
-                        importance = importance,
-                        color = selectedColor.toArgb(),
-                        deadline = deadline,
-                        isDone = isDone
-                    )
-                    onSave(item)
+                    viewModel.onSaveClick()
+                    onBack.invoke()
                 },
-                canSave = text.isNotBlank()
+                canSave = ui.text.isNotBlank() && !ui.isSaving
             )
         }
     ) { paddingValues ->
@@ -128,70 +104,66 @@ fun EditTodoScreen(
                 .alpha(contentAlpha)
         ) {
             TextInputSection(
-                text = text,
-                onTextChange = { text = it },
-                enabled = !isDone
+                text = ui.text,
+                onTextChange = viewModel::onTextChange,
+                enabled = !ui.isDone
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
             HorizontalDivider()
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
 
             DeadlineSection(
-                deadline = deadline,
-                onDeadlineClick = { showDatePicker = true },
-                onClearDeadline = { deadline = null },
-                enabled = !isDone
+                deadline = ui.deadline,
+                onDeadlineClick = viewModel::onOpenDatePicker,
+                onClearDeadline = viewModel::onClearDeadline,
+                enabled = !ui.isDone
             )
-            Spacer(modifier = Modifier.height(16.dp))
 
+            Spacer(Modifier.height(16.dp))
             DoneSection(
-                isDone = isDone,
-                onDoneChange = { isDone = it }
+                isDone = ui.isDone,
+                onDoneChange = viewModel::onDoneChange
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
             HorizontalDivider()
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
 
             ImportanceSelector(
-                selectedImportance = importance,
-                onImportanceSelected = { importance = it },
-                enabled = !isDone
+                selectedImportance = ui.importance,
+                onImportanceSelected = viewModel::onImportanceSelected,
+                enabled = !ui.isDone
             )
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(Modifier.height(32.dp))
             HorizontalDivider()
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
 
             ColorSelector(
                 selectedColor = selectedColor,
                 customColor = customColor,
-                onColorSelected = { selectedColor = it },
-                onCustomColorClick = { showColorPicker = true }
+                onColorSelected = { viewModel.onColorSelected(it.toArgb(), isCustom = false) },
+                onCustomColorClick = viewModel::onOpenColorPicker
             )
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(Modifier.height(32.dp))
         }
     }
 
-    if (showDatePicker) {
+    if (ui.showDatePicker) {
         TodoDatePickerDialog(
-            initialDate = deadline,
-            onDateSelected = { deadline = it },
-            onDismiss = { showDatePicker = false }
+            initialDate = ui.deadline,
+            onDateSelected = viewModel::onDeadlineSelected,
+            onDismiss = viewModel::onDismissDatePicker
         )
     }
 
     AnimatedColorPickerDialog(
-        visible = showColorPicker,
+        visible = ui.showColorPicker,
         initialColor = customColor ?: selectedColor,
-        onColorSelected = { color ->
-            customColor = color
-            selectedColor = color
-            showColorPicker = false
-        },
-        onDismiss = { showColorPicker = false }
+        onColorSelected = { viewModel.onColorSelected(it.toArgb(), isCustom = true) },
+        onDismiss = viewModel::onDismissColorPicker
     )
 }
 

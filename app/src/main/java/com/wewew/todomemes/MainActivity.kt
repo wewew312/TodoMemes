@@ -11,21 +11,20 @@ import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.wewew.todomemes.navigation.AppNavigation
 import com.wewew.todomemes.ui.theme.TodoMemesTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val fileStorage = FileStorage(context = this)
-        fileStorage.load()
-
         setContent {
             TodoMemesTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     AppNavigation(
-                        fileStorage = fileStorage,
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
