@@ -1,9 +1,9 @@
 package com.wewew.todomemes
 
 enum class Importance(val ruName: String) {
-    LOW("неважная"),
-    NORMAL("обычная"),
-    HIGH("важная");
+    LOW("😴Неважно"),
+    NORMAL("🙏Обычно"),
+    HIGH("❗Сверхважно");
 
     companion object {
         fun fromRuName(value: String?): Importance = when (value) {
