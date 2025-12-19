@@ -39,6 +39,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
@@ -46,17 +49,17 @@ import com.wewew.todomemes.TodoItem
 import com.wewew.todomemes.ui.components.MemeUrls.MEME_EMPTY
 import com.wewew.todomemes.ui.components.MemeUrls.MEME_HAS_CONTENT
 import com.wewew.todomemes.ui.components.TodoItemCard
+import com.wewew.todomemes.ui.viewmodel.TodoListViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TodoListScreen(
-    todos: List<TodoItem>,
     onTodoClick: (TodoItem) -> Unit,
     onAddClick: () -> Unit,
-    onDeleteTodo: (TodoItem) -> Unit,
-    onToggleDone: (TodoItem) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: TodoListViewModel = hiltViewModel()
 ) {
+    val ui by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
     Scaffold(
@@ -78,7 +81,7 @@ fun TodoListScreen(
             }
         }
     ) { paddingValues ->
-        if (todos.isEmpty()) {
+        if (ui.todos.isEmpty()) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -143,17 +146,17 @@ fun TodoListScreen(
                     }
                 }
                 items(
-                    items = todos,
+                    items = ui.todos,
                     key = { it.uid }
                 ) { todo ->
                     SwipeToDeleteContainer(
                         item = todo,
-                        onDelete = { onDeleteTodo(todo) }
+                        onDelete = { viewModel.deleteTodo(todo) }
                     ) {
                         TodoItemCard(
                             item = todo,
                             onClick = { onTodoClick(todo) },
-                            onCheckedChange = { onToggleDone(todo) }
+                            onCheckedChange = { viewModel.toggleDone(todo) }
                         )
                     }
                 }
