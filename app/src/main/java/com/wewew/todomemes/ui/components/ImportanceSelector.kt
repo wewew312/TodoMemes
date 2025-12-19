@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.wewew.todomemes.Importance
+import com.wewew.todomemes.data.local.model.Importance
 
 @Composable
 fun ImportanceSelector(

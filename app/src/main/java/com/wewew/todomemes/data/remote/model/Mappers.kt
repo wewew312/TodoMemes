@@ -1,8 +1,8 @@
 package com.wewew.todomemes.data.remote.model
 
 import android.graphics.Color
-import com.wewew.todomemes.Importance
-import com.wewew.todomemes.TodoItem
+import com.wewew.todomemes.data.local.model.Importance
+import com.wewew.todomemes.data.local.model.TodoItem
 import java.time.Instant
 
 private fun Importance.toApi(): String = when (this) {

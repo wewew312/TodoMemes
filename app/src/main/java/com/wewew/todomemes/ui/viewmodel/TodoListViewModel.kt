@@ -2,7 +2,7 @@ package com.wewew.todomemes.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.wewew.todomemes.TodoItem
+import com.wewew.todomemes.data.local.model.TodoItem
 import com.wewew.todomemes.data.repository.TodoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

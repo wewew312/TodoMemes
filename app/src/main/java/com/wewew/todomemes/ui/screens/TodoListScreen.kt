@@ -41,11 +41,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import com.wewew.todomemes.TodoItem
+import com.wewew.todomemes.data.local.model.TodoItem
 import com.wewew.todomemes.ui.components.MemeUrls.MEME_EMPTY
 import com.wewew.todomemes.ui.components.MemeUrls.MEME_HAS_CONTENT
 import com.wewew.todomemes.ui.components.TodoItemCard

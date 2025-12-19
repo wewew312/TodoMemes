@@ -1,6 +1,6 @@
 package com.wewew.todomemes.data.repository
 
-import com.wewew.todomemes.TodoItem
+import com.wewew.todomemes.data.local.model.TodoItem
 import com.wewew.todomemes.data.local.TodoLocalDataSource
 import com.wewew.todomemes.data.remote.TodoRemoteDataSource
 import kotlinx.coroutines.flow.Flow

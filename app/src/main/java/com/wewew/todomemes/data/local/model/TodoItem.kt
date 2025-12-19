@@ -1,4 +1,4 @@
-package com.wewew.todomemes
+package com.wewew.todomemes.data.local.model
 
 import android.graphics.Color
 import java.time.Instant

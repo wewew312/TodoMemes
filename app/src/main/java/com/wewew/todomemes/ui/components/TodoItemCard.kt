@@ -27,8 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import com.wewew.todomemes.Importance
-import com.wewew.todomemes.TodoItem
+import com.wewew.todomemes.data.local.model.Importance
+import com.wewew.todomemes.data.local.model.TodoItem
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
