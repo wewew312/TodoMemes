@@ -56,8 +56,16 @@ dependencies {
     // Splash Screen
     implementation(libs.androidx.splashscreen)
 
+    // Navigation
+    implementation(libs.androidx.navigation.compose)
+
     // Memory leak detection (debug only)
     debugImplementation(libs.leakcanary)
+
+    // Image loader
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+    implementation("androidx.compose.material:material-icons-extended")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

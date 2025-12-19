@@ -12,6 +12,9 @@ logbackAndroid = "3.0.0"
 slf4j = "2.0.7"
 splashscreen = "1.0.1"
 leakcanary = "2.14"
+navigationCompose = "2.8.4"
+coilCompose = "3.1.0"
+coilNetworkOkhttp = "3.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -32,6 +35,9 @@ logback-android = { group = "com.github.tony19", name = "logback-android", versi
 slf4j-api = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
 androidx-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashscreen" }
 leakcanary = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leakcanary" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
+coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilNetworkOkhttp" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
