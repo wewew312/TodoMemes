@@ -6,9 +6,7 @@ plugins {
 
 android {
     namespace = "com.wewew.todomemes"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.wewew.todomemes"
@@ -50,6 +48,17 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+
+    // Logging
+    implementation(libs.logback.android)
+    implementation(libs.slf4j.api)
+
+    // Splash Screen
+    implementation(libs.androidx.splashscreen)
+
+    // Memory leak detection (debug only)
+    debugImplementation(libs.leakcanary)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
