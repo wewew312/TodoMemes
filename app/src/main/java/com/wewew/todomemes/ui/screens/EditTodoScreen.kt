@@ -1,7 +1,19 @@
 package com.wewew.todomemes.ui.screens
 
 import android.graphics.Color as AndroidColor
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -44,9 +56,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import com.wewew.todomemes.Importance
 import com.wewew.todomemes.TodoItem
 import com.wewew.todomemes.ui.components.ColorPicker
@@ -75,7 +86,7 @@ fun EditTodoScreen(
     }
 
     var customColor by remember {
-        mutableStateOf<Color?>(
+        mutableStateOf(
             if (todoItem != null && !presetColors.contains(Color(todoItem.color))) {
                 Color(todoItem.color)
             } else null
@@ -172,25 +183,74 @@ fun EditTodoScreen(
         )
     }
 
-    if (showColorPicker) {
-        Dialog(
-            onDismissRequest = { showColorPicker = false },
-            properties = DialogProperties(usePlatformDefaultWidth = false)
+    AnimatedColorPickerDialog(
+        visible = showColorPicker,
+        initialColor = customColor ?: selectedColor,
+        onColorSelected = { color ->
+            customColor = color
+            selectedColor = color
+            showColorPicker = false
+        },
+        onDismiss = { showColorPicker = false }
+    )
+}
+
+@Composable
+fun AnimatedColorPickerDialog(
+    visible: Boolean,
+    initialColor: Color,
+    onColorSelected: (Color) -> Unit,
+    onDismiss: () -> Unit
+) {
+    AnimatedVisibility(
+        visible = visible,
+        enter = fadeIn(tween(200)) + scaleIn(
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioMediumBouncy,
+                stiffness = Spring.StiffnessLow
+            ),
+            transformOrigin = TransformOrigin(0.5f, 1f)
+        ) + slideInVertically(
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioMediumBouncy,
+                stiffness = Spring.StiffnessMedium
+            ),
+            initialOffsetY = { it / 2 }
+        ),
+        exit = fadeOut(tween(150)) + scaleOut(
+            animationSpec = tween(150),
+            transformOrigin = TransformOrigin(0.5f, 1f)
+        ) + slideOutVertically(
+            animationSpec = tween(150),
+            targetOffsetY = { it / 2 }
+        )
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.5f))
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = onDismiss
+                ),
+            contentAlignment = Alignment.Center
         ) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(16.dp)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = {}
+                    ),
                 shape = RoundedCornerShape(16.dp)
             ) {
                 ColorPicker(
-                    initialColor = customColor ?: selectedColor,
-                    onColorSelected = { color ->
-                        customColor = color
-                        selectedColor = color
-                        showColorPicker = false
-                    },
-                    onDismiss = { showColorPicker = false }
+                    initialColor = initialColor,
+                    onColorSelected = onColorSelected,
+                    onDismiss = onDismiss
                 )
             }
         }
